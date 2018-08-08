@@ -1,10 +1,11 @@
 import RPi.GPIO as GPIO
 import sys
+import tkinter as tk
 
 class SpeedJenga:
-    def __init__(self, numPlayers):
-        self.numPlayers = numPlayers
-        self.currentPlayer = 0
+    def __init__(self):
+        #self.numPlayers = numPlayers
+        #self.currentPlayer = 0
 
         GPIO.setwarnings(False)
         GPIO.setmode(GPIO.BOARD)
@@ -22,6 +23,23 @@ class SpeedJenga:
 
         GPIO.add_event_detect(26, GPIO.RISING, callback = self.redButtonCallback)
 
+        # Timer setup
+        self.root = tk.Tk()
+        self.label = tk.Label(self.root, text="null")
+        self.label.place(x=35, y=15)
+        self.label.pack()
+
+        self.countdown(5)
+
+        self.root.mainloop()
+
+    def countdown(self, count):
+        #self.label['test'] = count
+        self.label.configure(text=str(count))
+
+        if count > 0:
+            self.root.after(1000, self.countdown, count-1)
+
     # Red button will be used to end games
     def redButtonCallback(self, channel):
         print("Red button was pushed")
@@ -30,9 +48,8 @@ class SpeedJenga:
 
     # Green button will be used to start games
     def greenButtonCallback(self, channel):
-        print("Player " + str(self.currentPlayer) + " successfully made a move")
-        self.currentPlayer = (self.currentPlayer + 1) % self.numPlayers
-        print("New current player is now " + str(self.currentPlayer))
+        print("Player successfully made a move")
+        print("Next player please make a move...")
         # TODO: RESET TIMER LOGIC
 
 
