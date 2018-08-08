@@ -6,7 +6,7 @@ from picamera import PiCamera
 from time import sleep
 from speedJenga import SpeedJenga
 from consts import *
-from PIL import Image, ImageTK
+#from PIL import Image, ImageTK
 
 class RandomizedSpeedJenga(SpeedJenga):
     def __init__(self):
@@ -23,9 +23,15 @@ class RandomizedSpeedJenga(SpeedJenga):
         GPIO.add_event_detect(RED_BUTTON, GPIO.RISING, callback=lambda: 3, bouncetime=500)
 
         self.camera = PiCamera()
+
+        self.root = tk.Tk()
+        self.frame = tk.Frame(self.root, width=768, height=576)
+        self.frame.pack()
+
         self.takePictures()
 
     def takePictures(self):
+
         self.camera.start_preview()
         sleep(10)
         self.camera.stop_preview()
