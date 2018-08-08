@@ -3,6 +3,11 @@ import sys
 import tkinter as tk
 import time
 
+# GPIO consts
+GREEN_BUTTON = 10
+WHITE_BUTTON = 18
+RED_BUTTON = 26
+
 class SpeedJenga:
     def __init__(self):
         #self.numPlayers = numPlayers
@@ -11,18 +16,17 @@ class SpeedJenga:
         GPIO.setwarnings(False)
         GPIO.setmode(GPIO.BOARD)
 
-        # Pin 10 will be the red button
-        GPIO.setup(10, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
+        GPIO.setup(GREEN_BUTTON, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
 
-        GPIO.add_event_detect(10, GPIO.RISING, callback = self.greenButtonCallback, bouncetime=500)
+        GPIO.add_event_detect(GREEN_BUTTON, GPIO.RISING, callback = self.greenButtonCallback, bouncetime=500)
 
-        GPIO.setup(18, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
+        GPIO.setup(WHITE_BUTTON, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
 
-        GPIO.add_event_detect(18, GPIO.RISING, callback = self.whiteButtonCallback)
+        GPIO.add_event_detect(WHITE_BUTTON, GPIO.RISING, callback = self.whiteButtonCallback)
 
-        GPIO.setup(26, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
+        GPIO.setup(RED_BUTTON, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
 
-        GPIO.add_event_detect(26, GPIO.RISING, callback = self.redButtonCallback)
+        GPIO.add_event_detect(RED_BUTTON, GPIO.RISING, callback = self.redButtonCallback)
 
         # Timer setup
         self.root = tk.Tk()
@@ -34,23 +38,25 @@ class SpeedJenga:
         self.root.mainloop()
 
     def countdown(self):
-        self.p = 10.00
-        self.t = time.time()
-        self.n = time.time()
-        while self.n - self.t < self.p:
-            self.n = time.time()
+        allottedTime = 10.00
+        startTime = time.time()
+        currTime = time.time()
+        while currTime - startTime < allottedTime:
+            currTime = time.time()
 
-            if GPIO.input(26):
-                self.p = 10.00
-                self.t = time.time()
-                self.n = time.time()
+            # Player successfully made a move so restart the timer for the next player
+            if GPIO.input(RED_BUTTON):
+                allottedTime = 10.00
+                startTime = time.time()
+                currTime = time.time()
                 self.label.configure(font=("Courier", 150))
-            if self.n >= self.t + self.p:
+
+            if currTime >= startTime + allottedTime:
                 self.label.config(font=("Courier", 80))
                 self.label.configure(text = "Time's up")
                 GPIO.cleanup()
             else:
-                self.label.configure(text = round(10 - (self.n - self.t)))
+                self.label.configure(text = round(10 - (currTime - startTime)))
         
     # Red button will be used to end games
     def redButtonCallback(self, channel):
