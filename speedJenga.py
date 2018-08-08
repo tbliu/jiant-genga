@@ -38,7 +38,7 @@ class SpeedJenga:
         self.root.mainloop()
 
     def countdown(self):
-        allottedTime = 10.00
+        allottedTime = 30.00
         startTime = time.time()
         currTime = time.time()
         while currTime - startTime < allottedTime:
@@ -46,17 +46,17 @@ class SpeedJenga:
 
             # Player successfully made a move so restart the timer for the next player
             if GPIO.input(RED_BUTTON):
-                allottedTime = 10.00
                 startTime = time.time()
                 currTime = time.time()
-                self.label.configure(font=("Courier", 150))
+                self.label.configure(font=("Courier", 80))
 
             if currTime >= startTime + allottedTime:
-                self.label.config(font=("Courier", 80))
+                self.label.configure(font=("Courier", 80))
                 self.label.configure(text = "Time's up")
                 GPIO.cleanup()
             else:
-                self.label.configure(text = round(10 - (currTime - startTime)))
+                timeLeft = round(allottedTime - (currTime - startTime))
+                self.label.configure(text = timeLeft)
         
     # Red button will be used to end games
     def redButtonCallback(self, channel):
