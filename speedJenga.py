@@ -1,6 +1,7 @@
 import RPi.GPIO as GPIO
 import sys
 import tkinter as tk
+import time
 
 class SpeedJenga:
     def __init__(self):
@@ -25,32 +26,44 @@ class SpeedJenga:
 
         # Timer setup
         self.root = tk.Tk()
-        self.label = tk.Label(self.root, text="null")
-        self.label.place(x=35, y=15)
+        self.root.title("Jiant Genga")
+        self.label = tk.Label(self.root, text="press the green button to start")
+        self.label.place(x=60, y=30)
         self.label.pack()
-
-        self.countdown(5)
 
         self.root.mainloop()
 
-    def countdown(self, count):
-        #self.label['test'] = count
-        self.label.configure(text=str(count))
+    def countdown(self):
+        self.p = 10.00
+        self.t = time.time()
+        self.n = time.time()
+        while self.n - self.t < self.p:
+            self.n = time.time()
 
-        if count > 0:
-            self.root.after(1000, self.countdown, count-1)
-
+            if GPIO.input(26):
+                self.p = 10.00
+                self.t = time.time()
+                self.n = time.time()
+                self.label.config(font=("Courier", 150))
+            if self.n >= self.t + self.p:
+                self.label.config(font=("Courier", 80))
+                self.label.configure(text = "Time's up")
+                GPIO.cleanup()
+            else:
+                self.label.configure(text = round(10 - (self.n - self.t)))
+        
     # Red button will be used to end games
     def redButtonCallback(self, channel):
-        print("Red button was pushed")
-        GPIO.cleanup()
-        sys.exit(0)
+        print("Red button pushed down")
+        #GPIO.cleanup()
+        #sys.exit(0)
 
     # Green button will be used to start games
     def greenButtonCallback(self, channel):
-        print("Player successfully made a move")
+        self.root.title("Next player, please make a move")
+        self.label.config(font=("Courier", 150))
         print("Next player please make a move...")
-        # TODO: RESET TIMER LOGIC
+        self.countdown()
 
 
     # White button will be used to signal end of a player's turn and the start of another's turn. 
