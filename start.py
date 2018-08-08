@@ -10,8 +10,9 @@ def playSpeedJenga():
         continue
 
 
-root = tk.Tk()
-b = tk.Button(root, text="Tap to play Speed Jenga", command = playSpeedJenga, width=500, height=500, font=("Helvetica", 32))
+#root = tk.Tk()
+#b = tk.Button(root, text="Tap to play Speed Jenga", command = playSpeedJenga, width=500, height=500, font=("Helvetica", 32))
 
-b.pack()
-b.mainloop()
+#b.pack()
+playSpeedJenga()
+tk.mainloop()
