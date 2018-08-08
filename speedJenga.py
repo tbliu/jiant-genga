@@ -2,11 +2,7 @@ import RPi.GPIO as GPIO
 import sys
 import tkinter as tk
 import time
-
-# GPIO consts
-GREEN_BUTTON = 10
-WHITE_BUTTON = 18
-RED_BUTTON = 26
+from consts import *
 
 class SpeedJenga:
     def __init__(self):

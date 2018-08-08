@@ -2,4 +2,4 @@
 
 ## Speed Jenga
 
-## Slack Jenga
+## Randomized Speed Jenga
