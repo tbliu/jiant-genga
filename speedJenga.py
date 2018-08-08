@@ -48,7 +48,6 @@ class SpeedJenga:
             if GPIO.input(RED_BUTTON):
                 startTime = time.time()
                 currTime = time.time()
-                self.label.configure(font=("Courier", 80))
 
             if currTime >= startTime + allottedTime:
                 self.label.configure(font=("Courier", 80))
