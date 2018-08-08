@@ -2,16 +2,12 @@ import tkinter as tk
 from tkinter import simpledialog
 from speedJenga import SpeedJenga
 
-def playSpeedJenga():
-    game = SpeedJenga()
-
 root = tk.Tk()
-frame = tk.Frame(root)
+frame = tk.Frame(root, width=768, height=576)
 frame.pack()
-speedJengaButton = tk.Button(frame, text= "Speed Jenga", fg="red", command=lambda: SpeedJenga())
+speedJengaButton = tk.Button(frame, text= "Speed Jenga", font=("Helvetica", 18), height="30", width="30", command=lambda: SpeedJenga())
 speedJengaButton.pack(side = tk.LEFT)
 
-randomizedJengaButton = tk.Button(frame, text = "Randomized Speed Jenga", fg="red")
+randomizedJengaButton = tk.Button(frame, text = "Randomized Speed Jenga", font=("Helvetica", 18), height="30", width="30")
 randomizedJengaButton.pack(side = tk.RIGHT)
-#playJenga()
 tk.mainloop()
