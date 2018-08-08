@@ -11,7 +11,7 @@ def playSpeedJenga():
 
 
 root = tk.Tk()
-b = tk.Button(root, text="Play Speed Jenga", command = playSpeedJenga)
+b = tk.Button(root, text="Tap to play Speed Jenga", command = playSpeedJenga, width=500, height=500, font=("Helvetica", 32))
 
 b.pack()
 b.mainloop()

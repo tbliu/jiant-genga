@@ -27,7 +27,7 @@ class SpeedJenga:
         # Timer setup
         self.root = tk.Tk()
         self.root.title("Jiant Genga")
-        self.label = tk.Label(self.root, text="press the green button to start")
+        self.label = tk.Label(self.root, text="press the green button to start", height=500, width=500, font=("Helvetica", 32))
         self.label.place(x=60, y=30)
         self.label.pack()
 
@@ -46,6 +46,8 @@ class SpeedJenga:
                 self.n = time.time()
                 self.label.config(font=("Courier", 150))
             if self.n >= self.t + self.p:
+                #restart = tk.Button(self.root, text="Restart", fg="red", command=print("hi"))
+                #restart.pack()
                 self.label.config(font=("Courier", 80))
                 self.label.configure(text = "Time's up")
                 GPIO.cleanup()
