@@ -68,7 +68,7 @@ class SpeedJenga:
                 self.label.configure(text = "Time's up")
                 self.pauseSound()
                 self.playSound("buzz.mp3")
-                self.b = tk.Button(self.root, text="OK", command=self.testcallback)
+                self.b = tk.Button(self.root, text="Press the white button to return to main menu", command=self.whiteButtonCallback)
                 self.b.pack()
                 GPIO.cleanup()
             else:
@@ -77,7 +77,7 @@ class SpeedJenga:
                 self.label.configure(text = formattedTime)
         
 
-    def testcallback(self):
+    def whiteButtonCallback(self):
         self.root.destroy()
         os.system("python3 start.py")
 
@@ -92,8 +92,4 @@ class SpeedJenga:
         self.root.title("Next player, please make a move")
         self.label.config(font=("Courier", 150))
         self.countdown()
-
-    # White button will be used to signal end of a player's turn and the start of another's turn. 
-    def whiteButtonCallback(self, channel):
-        print("White button was pushed")
 
