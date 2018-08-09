@@ -9,12 +9,14 @@ def speedJengaCallback(channel):
     GPIO.remove_event_detect(RED_BUTTON)
     GPIO.remove_event_detect(WHITE_BUTTON)
     GPIO.remove_event_detect(GREEN_BUTTON)
+    GPIO.cleanup()
     return SpeedJenga()
 
 def randomizedJengaCallback(channel):
     GPIO.remove_event_detect(RED_BUTTON)
     GPIO.remove_event_detect(WHITE_BUTTON)
     GPIO.remove_event_detect(GREEN_BUTTON)
+    GPIO.cleanup()
     return RandomizedSpeedJenga()
 
 GPIO.setwarnings(False)

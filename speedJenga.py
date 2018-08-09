@@ -12,7 +12,7 @@ class SpeedJenga:
         GPIO.setmode(GPIO.BOARD)
 
         GPIO.setup(GREEN_BUTTON, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
-        GPIO.add_event_detect(GREEN_BUTTON, GPIO.RISING, callback = self.startGame, bouncetime=500)
+        GPIO.add_event_detect(GREEN_BUTTON, GPIO.RISING, callback = self.greenButtonCallback, bouncetime=500)
 
         GPIO.setup(WHITE_BUTTON, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
         GPIO.add_event_detect(WHITE_BUTTON, GPIO.RISING, callback = self.whiteButtonCallback)
@@ -36,28 +36,6 @@ class SpeedJenga:
     def playSound(self):
         print("start playing sound")
         pygame.mixer.music.play(0)
-
-    def startGame(self, channel):
-        """
-        print("Starting game")
-        allottedTime = 5.0
-        startTime = time.time()
-        currTime = time.time()
-        while currTime - startTime < allottedTime:
-            currTime = time.time()
-            timeLeft = round(allottedTime - (currTime - startTime))
-            self.label.configure(font=("Courier", 80))
-            self.label.configure(text = "Starting in: \n" + str(timeLeft) + "\nseconds")
-
-        print("Resetting green callback")
-        GPIO.remove_event_detect(GREEN_BUTTON)
-        GPIO.setup(GREEN_BUTTON, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
-        GPIO.add_event_detect(GREEN_BUTTON, GPIO.RISING, callback = self.greenButtonCallback, bouncetime=500)
-        self.label.configure(font=("Courier", 120))
-        self.label.configure(text = "GO!")
-        return self.countdown()
-        """
-        print("hello")
 
     def countdown(self):
         self.playSound()
