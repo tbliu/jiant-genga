@@ -48,6 +48,8 @@ class SpeedJenga:
         print("paused sound")
 
     def countdown(self):
+        self.playSound("ready.mp3")
+        time.sleep(4)
         self.playSound("Jeopardy-theme-song.mp3")
         allottedTime = 30.00
         startTime = time.time()
