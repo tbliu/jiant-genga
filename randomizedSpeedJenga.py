@@ -43,11 +43,11 @@ class RandomizedSpeedJenga(SpeedJenga):
     def countdown(self):
         self.label.configure(font=("Courier", 120))
         self.label.configure(text="Ready...")
-        self.playSound("ready.mp3")
+        self.playSound("/home/pi/jiant-genga/ready.mp3")
         time.sleep(4)
         self.label.configure(text = "GO!")
         time.sleep(1)
-        self.playSound("Jeopardy-theme-song.mp3")
+        self.playSound("/home/pi/jiant-genga/Jeopardy-theme-song.mp3")
         allottedTime = 30.00
         self.startTime = time.time()
         self.currTime = time.time()
@@ -61,7 +61,7 @@ class RandomizedSpeedJenga(SpeedJenga):
             if (not prev_input) and curr_input and self.index < len(self.players):
                 self.player = self.players[self.index]
                 self.index += 1
-                self.playSound("Jeopardy-theme-song.mp3")
+                self.playSound("/home/pi/jiant-genga/Jeopardy-theme-song.mp3")
                 self.startTime = time.time()
                 self.currTime = time.time()
             # All players this round have went. Reshuffle the list and start again
@@ -79,9 +79,9 @@ class RandomizedSpeedJenga(SpeedJenga):
             if self.currTime >= self.startTime + allottedTime:
                 self.label.configure(font=("Courier", 80))
                 self.label.configure(text = "Time's up")
-                self.pauseSounds()
-                self.playSound("buzz.mp3")
-                self.b = tk.Button(self.root, text="Press the white button to return to main menu", command=self.whiteButtonCallback)
+                self.pauseSound()
+                self.playSound("/home/pi/jiant-genga/buzz.mp3")
+                self.b = tk.Button(self.root, text="Press the white button to return to main menu", command=lambda: self.whiteButtonCallback(WHITE_BUTTON))
                 self.b.pack()
                 GPIO.cleanup()
             else:

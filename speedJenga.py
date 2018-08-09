@@ -45,11 +45,11 @@ class SpeedJenga:
     def countdown(self):
         self.label.configure(font=("Courier", 120))
         self.label.configure(text = "Ready...")
-        self.playSound("ready.mp3")
+        self.playSound("/home/pi/jiant-genga/ready.mp3")
         time.sleep(4)
         self.label.configure(text = "GO!")
         time.sleep(1)
-        self.playSound("Jeopardy-theme-song.mp3")
+        self.playSound("/home/pi/jiant-genga/Jeopardy-theme-song.mp3")
         allottedTime = 30.00
         startTime = time.time()
         currTime = time.time()
@@ -60,14 +60,14 @@ class SpeedJenga:
             if GPIO.input(RED_BUTTON):
                 startTime = time.time()
                 currTime = time.time()
-                self.playSound("Jeopardy-theme-song.mp3")
+                self.playSound("/home/pi/jiant-genga/Jeopardy-theme-song.mp3")
 
             if currTime >= startTime + allottedTime:
                 self.label.configure(font=("Courier", 80))
                 self.label.configure(text = "Time's up")
                 self.pauseSound()
-                self.playSound("buzz.mp3")
-                self.b = tk.Button(self.root, text="Press the white button to return to main menu", command=self.whiteButtonCallback)
+                self.playSound("/home/pi/jiant-genga/buzz.mp3")
+                self.b = tk.Button(self.root, text="Press the white button to return to main menu", command=lambda: self.whiteButtonCallback(WHITE_BUTTON))
                 self.b.pack()
                 GPIO.cleanup()
             else:
