@@ -16,7 +16,7 @@ class SpeedJenga:
 
         GPIO.setup(GREEN_BUTTON, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
 
-        GPIO.add_event_detect(GREEN_BUTTON, GPIO.RISING, callback = self.greenButtonCallback, bouncetime=500)
+        GPIO.add_event_detect(GREEN_BUTTON, GPIO.RISING, callback = self.startGameCallback, bouncetime=500)
 
         GPIO.setup(WHITE_BUTTON, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
 
@@ -33,15 +33,33 @@ class SpeedJenga:
         # Timer setup
         self.root = tk.Tk()
         self.root.title("Jiant Genga")
-        self.label = tk.Label(self.root, text="press the green button to start", font=("Helvetica", 32))
+        self.label = tk.Label(self.root, text="Press the green button to start", font=("Helvetica", 32))
         self.label.place(x=60, y=30)
         self.label.pack()
+
+        self.startGame()
 
         self.root.mainloop()
 
     def playSound(self):
         print("start playing sound")
         pygame.mixer.music.play(0)
+
+    def startGameCallback(self, channel):
+        allottedTime = 5.0
+        startTime = time.time()
+        currTime = time.time()
+        while currTime - startTime < allottedTime:
+            currTime = time.time()
+            timeLeft = round(allottedTime - (currTime - startTime))
+            self.label.configure(font=("Courier", 80))
+            self.label.configure(text = "Starting in: \n" + str(timeLeft) + "\nseconds")
+
+        GPIO.remove_event_detect(channel)
+        GPIO.add_event_detect(channel, GPIO.RISING, callback = self.greenButtonCallback, bouncetime=500)
+        self.label.configure(font=("Courier", 120))
+        self.label.configure(text = "GO!")
+        self.countdown()
 
     def countdown(self):
         self.playSound()
@@ -72,7 +90,6 @@ class SpeedJenga:
         self.root.destroy()
         os.system("python3 start.py")
 
-        
     # Red button will be used to end games
     def redButtonCallback(self, channel):
         print("Red button pushed down")
@@ -81,11 +98,9 @@ class SpeedJenga:
 
     # Green button will be used to start games
     def greenButtonCallback(self, channel):
-        print("green button pressed")
         self.root.title("Next player, please make a move")
         self.label.config(font=("Courier", 150))
         self.countdown()
-
 
     # White button will be used to signal end of a player's turn and the start of another's turn. 
     def whiteButtonCallback(self, channel):
