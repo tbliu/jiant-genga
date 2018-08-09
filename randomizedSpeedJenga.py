@@ -1,6 +1,7 @@
 import tkinter as tk
 import RPi.GPIO as GPIO
 import sys
+import os
 import time
 import random
 from tkinter import simpledialog
@@ -68,12 +69,18 @@ class RandomizedSpeedJenga(SpeedJenga):
             if self.currTime >= self.startTime + allottedTime:
                 self.label.configure(font=("Courier", 80))
                 self.label.configure(text = "Time's up")
+                self.b = tk.Button(self.root, text="OK", command=self.testcallback)
+                self.b.pack()
                 GPIO.cleanup()
             else:
                 self.label.configure(font=("Courier", 64))
                 timeLeft = round(allottedTime - (self.currTime - self.startTime))
                 self.label.configure(text = "Player:\n " + self.player + "\n" + str(timeLeft))
             prev_input = curr_input
+
+    def testcallback(self):
+        self.root.destroy()
+        os.system("python3 start.py")
 
     def redButtonCallback(self, channel):
         return

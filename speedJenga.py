@@ -2,6 +2,7 @@ import RPi.GPIO as GPIO
 import sys
 import tkinter as tk
 import time
+import os
 from consts import *
 
 class SpeedJenga:
@@ -48,10 +49,18 @@ class SpeedJenga:
             if currTime >= startTime + allottedTime:
                 self.label.configure(font=("Courier", 80))
                 self.label.configure(text = "Time's up")
+                self.b = tk.Button(self.root, text="OK", command=self.testcallback)
+                self.b.pack()
                 GPIO.cleanup()
             else:
                 timeLeft = round(allottedTime - (currTime - startTime))
                 self.label.configure(text = timeLeft)
+        
+
+    def testcallback(self):
+        self.root.destroy()
+        os.system("python3 start.py")
+
         
     # Red button will be used to end games
     def redButtonCallback(self, channel):
