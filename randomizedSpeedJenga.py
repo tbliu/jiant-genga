@@ -21,7 +21,7 @@ class RandomizedSpeedJenga(SpeedJenga):
         GPIO.add_event_detect(WHITE_BUTTON, GPIO.RISING, callback=self.whiteButtonCallback, bouncetime=500)
 
         GPIO.setup(RED_BUTTON, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
-        GPIO.add_event_detect(RED_BUTTON, GPIO.RISING)
+        #GPIO.add_event_detect(RED_BUTTON, GPIO.RISING, callback=self.redButtonCallback, bouncetime=1000)
 
         self.camera = PiCamera()
 
@@ -37,42 +37,46 @@ class RandomizedSpeedJenga(SpeedJenga):
 
         self.root.mainloop()
 
-    def countdown(self, player):
+    def countdown(self):
         allottedTime = 30.00
-        startTime = time.time()
-        currTime = time.time()
-        while currTime - startTime < allottedTime:
-            currTime = time.time()
+        self.startTime = time.time()
+        self.currTime = time.time()
+        prev_input = 1
+        while self.currTime - self.startTime < allottedTime:
+            self.currTime = time.time()
 
             # Player made a successful move
-            if GPIO.input(RED_BUTTON) and self.index < len(self.players):
-                player = self.players[self.index]
-                startTime = time.time()
-                currTime = time.time()
-            elif GPIO.input(RED_BUTTON) and self.index >= len(self.players):
+            curr_input = GPIO.input(RED_BUTTON)
+            if (not prev_input) and curr_input and self.index < len(self.players):
+                self.player = self.players[self.index]
+                self.index += 1
+                self.startTime = time.time()
+                self.currTime = time.time()
+            elif (not prev_input) and curr_input and self.index >= len(self.players):
                 self.index = 0
                 random.shuffle(self.players)
-                player = self.players[self.index]
-                startTime = time.time()
-                currTime = time.time()
-
-            if currTime >= startTime + allottedTime:
+                self.player = self.players[self.index]
+                self.index += 1
+                self.startTime = time.time()
+                self.currTime = time.time()
+            
+            if self.currTime >= self.startTime + allottedTime:
                 self.label.configure(font=("Courier", 80))
                 self.label.configure(text = "Time's up")
                 GPIO.cleanup()
             else:
-                self.index += 1
                 self.label.configure(font=("Courier", 64))
-                timeLeft = round(allottedTime - (currTime - startTime))
-                self.label.configure(text = "Player:\n " + player + "\n" + str(timeLeft))
+                timeLeft = round(allottedTime - (self.currTime - self.startTime))
+                self.label.configure(text = "Player:\n " + self.player + "\n" + str(timeLeft))
+            prev_input = curr_input
 
     def redButtonCallback(self, channel):
         return
 
     def greenButtonCallback(self, channel):
-        player = self.players[self.index]
+        self.player = self.players[self.index]
         self.index += 1
-        self.countdown(player)
+        self.countdown()
 
     def whiteButtonCallback(self, channel):
         return
