@@ -26,7 +26,7 @@ GPIO.setup(RED_BUTTON, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
 GPIO.add_event_detect(RED_BUTTON, GPIO.RISING, callback = speedJengaCallback, bouncetime=500)
 
 root = tk.Tk()
-label = tk.Label(root, width=768, height=576, text="Press the green button for Randomized Speed Jenga. \nPress the right button for Normal Speed Jenga", font=("Helvetica", 24))
+label = tk.Label(root, width=768, height=576, text="Press the green button for Randomized Speed Jenga. \nPress the red button for Normal Speed Jenga", font=("Helvetica", 24))
 label.pack()
 
 tk.mainloop()

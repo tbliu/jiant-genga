@@ -8,22 +8,16 @@ import pygame
 
 class SpeedJenga:
     def __init__(self):
-        #self.numPlayers = numPlayers
-        #self.currentPlayer = 0
-
         GPIO.setwarnings(False)
         GPIO.setmode(GPIO.BOARD)
 
         GPIO.setup(GREEN_BUTTON, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
-
-        GPIO.add_event_detect(GREEN_BUTTON, GPIO.RISING, callback = self.startGameCallback, bouncetime=500)
+        GPIO.add_event_detect(GREEN_BUTTON, GPIO.RISING, callback = self.startGame, bouncetime=500)
 
         GPIO.setup(WHITE_BUTTON, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
-
         GPIO.add_event_detect(WHITE_BUTTON, GPIO.RISING, callback = self.whiteButtonCallback)
 
         GPIO.setup(RED_BUTTON, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
-
         GPIO.add_event_detect(RED_BUTTON, GPIO.RISING, callback = self.redButtonCallback)
 
         # sound player set up
@@ -37,15 +31,15 @@ class SpeedJenga:
         self.label.place(x=60, y=30)
         self.label.pack()
 
-        self.startGame()
-
         self.root.mainloop()
 
     def playSound(self):
         print("start playing sound")
         pygame.mixer.music.play(0)
 
-    def startGameCallback(self, channel):
+    def startGame(self, channel):
+        """
+        print("Starting game")
         allottedTime = 5.0
         startTime = time.time()
         currTime = time.time()
@@ -55,11 +49,15 @@ class SpeedJenga:
             self.label.configure(font=("Courier", 80))
             self.label.configure(text = "Starting in: \n" + str(timeLeft) + "\nseconds")
 
-        GPIO.remove_event_detect(channel)
-        GPIO.add_event_detect(channel, GPIO.RISING, callback = self.greenButtonCallback, bouncetime=500)
+        print("Resetting green callback")
+        GPIO.remove_event_detect(GREEN_BUTTON)
+        GPIO.setup(GREEN_BUTTON, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
+        GPIO.add_event_detect(GREEN_BUTTON, GPIO.RISING, callback = self.greenButtonCallback, bouncetime=500)
         self.label.configure(font=("Courier", 120))
         self.label.configure(text = "GO!")
-        self.countdown()
+        return self.countdown()
+        """
+        print("hello")
 
     def countdown(self):
         self.playSound()
