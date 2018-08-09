@@ -8,22 +8,16 @@ import pygame
 
 class SpeedJenga:
     def __init__(self):
-        #self.numPlayers = numPlayers
-        #self.currentPlayer = 0
-
         GPIO.setwarnings(False)
         GPIO.setmode(GPIO.BOARD)
 
         GPIO.setup(GREEN_BUTTON, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
-
         GPIO.add_event_detect(GREEN_BUTTON, GPIO.RISING, callback = self.greenButtonCallback, bouncetime=500)
 
         GPIO.setup(WHITE_BUTTON, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
-
         GPIO.add_event_detect(WHITE_BUTTON, GPIO.RISING, callback = self.whiteButtonCallback)
 
         GPIO.setup(RED_BUTTON, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
-
         GPIO.add_event_detect(RED_BUTTON, GPIO.RISING, callback = self.redButtonCallback)
 
         # sound player set up
@@ -32,10 +26,12 @@ class SpeedJenga:
         # Timer setup
         self.root = tk.Tk()
         self.root.title("Jiant Genga")
-        self.label = tk.Label(self.root, text="press the green button to start", font=("Helvetica", 32))
-        self.label.place(x=60, y=30)
+        #self.root.attributes("-fullscreen", True)
+        self.label = tk.Label(self.root, text="Press the green button to start", font=("Courier", 24))
+        self.label.place(x=25,y=25, anchor="center")
+        self.label.configure(fg="lime green")
+        self.label.configure(bg="black")
         self.label.pack()
-
         self.root.mainloop()
 
     def playSound(self, song):
@@ -48,9 +44,12 @@ class SpeedJenga:
         print("paused sound")
 
     def countdown(self):
+        self.label.configure(font=("Courier", 120))
         self.label.configure(text = "Ready...")
         self.playSound("ready.mp3")
         time.sleep(4)
+        self.label.configure(text = "GO!")
+        time.sleep(1)
         self.playSound("Jeopardy-theme-song.mp3")
         allottedTime = 30.00
         startTime = time.time()
@@ -69,19 +68,19 @@ class SpeedJenga:
                 self.label.configure(text = "Time's up")
                 self.pauseSound()
                 self.playSound("buzz.mp3")
-                self.b = tk.Button(self.root, text="OK", command=self.testcallback)
+                self.b = tk.Button(self.root, text="Press the white button to return to main menu", command=self.whiteButtonCallback)
                 self.b.pack()
                 GPIO.cleanup()
             else:
-                timeLeft = round(allottedTime - (currTime - startTime))
-                self.label.configure(text = timeLeft)
+                timeLeft = round(allottedTime - (currTime - startTime), 2)
+                formattedTime = "{:04.2f}".format(timeLeft)
+                self.label.configure(text = formattedTime)
         
 
-    def testcallback(self):
+    def whiteButtonCallback(self):
         self.root.destroy()
         os.system("python3 start.py")
 
-        
     # Red button will be used to end games
     def redButtonCallback(self, channel):
         print("Red button pushed down")
@@ -90,13 +89,7 @@ class SpeedJenga:
 
     # Green button will be used to start games
     def greenButtonCallback(self, channel):
-        print("green button pressed")
         self.root.title("Next player, please make a move")
         self.label.config(font=("Courier", 150))
         self.countdown()
-
-
-    # White button will be used to signal end of a player's turn and the start of another's turn. 
-    def whiteButtonCallback(self, channel):
-        print("White button was pushed")
 
