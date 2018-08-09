@@ -28,14 +28,19 @@ class SpeedJenga:
         # Timer setup
         self.root = tk.Tk()
         self.root.title("Jiant Genga")
-        self.label = tk.Label(self.root, text="press the green button to start", font=("Helvetica", 32))
-        self.label.place(x=60, y=30)
+        self.label = tk.Label(self.root, text="Press the green button to start", font=("Helvetica", 32))
+        self.label.place(x=0, y=0)
+        self.label.configure(bg="black")
+        self.label.configure(fg="lime green")
         self.label.pack()
 
         self.root.mainloop()
 
     def countdown(self):
+        #self.root.configure(height=576)
+        #self.label.configure(width=10)
         allottedTime = 30.00
+        self.label.configure(font=("Courier", 200))
         startTime = time.time()
         currTime = time.time()
         while currTime - startTime < allottedTime:
@@ -53,8 +58,9 @@ class SpeedJenga:
                 self.b.pack()
                 GPIO.cleanup()
             else:
-                timeLeft = round(allottedTime - (currTime - startTime))
-                self.label.configure(text = timeLeft)
+                timeLeft = round(allottedTime - (currTime - startTime), 2)
+                formattedTime = '{0:.2f}'.format(timeLeft)
+                self.label.configure(text = formattedTime)
         
 
     def testcallback(self):
