@@ -4,6 +4,7 @@ import tkinter as tk
 import time
 import os
 from consts import *
+import pygame
 
 class SpeedJenga:
     def __init__(self):
@@ -25,6 +26,10 @@ class SpeedJenga:
 
         GPIO.add_event_detect(RED_BUTTON, GPIO.RISING, callback = self.redButtonCallback)
 
+        # sound player set up
+        pygame.init()
+        pygame.mixer.music.load("Jeopardy-theme-song.mp3")
+        
         # Timer setup
         self.root = tk.Tk()
         self.root.title("Jiant Genga")
@@ -34,7 +39,12 @@ class SpeedJenga:
 
         self.root.mainloop()
 
+    def playSound(self):
+        print("start playing sound")
+        pygame.mixer.music.play(0)
+
     def countdown(self):
+        self.playSound()
         allottedTime = 30.00
         startTime = time.time()
         currTime = time.time()
@@ -45,6 +55,7 @@ class SpeedJenga:
             if GPIO.input(RED_BUTTON):
                 startTime = time.time()
                 currTime = time.time()
+                self.playSound()
 
             if currTime >= startTime + allottedTime:
                 self.label.configure(font=("Courier", 80))
@@ -70,9 +81,9 @@ class SpeedJenga:
 
     # Green button will be used to start games
     def greenButtonCallback(self, channel):
+        print("green button pressed")
         self.root.title("Next player, please make a move")
         self.label.config(font=("Courier", 150))
-        print("Next player please make a move...")
         self.countdown()
 
 
