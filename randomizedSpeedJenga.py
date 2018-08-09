@@ -2,11 +2,12 @@ import tkinter as tk
 import RPi.GPIO as GPIO
 import sys
 import time
+import random
+from tkinter import simpledialog
 from picamera import PiCamera
 from time import sleep
 from speedJenga import SpeedJenga
 from consts import *
-#from PIL import Image, ImageTK
 
 class RandomizedSpeedJenga(SpeedJenga):
     def __init__(self):
@@ -24,15 +25,28 @@ class RandomizedSpeedJenga(SpeedJenga):
 
         self.camera = PiCamera()
 
+        playersInput = simpledialog.askstring("Players", "Please type the names of all players separated by commas (like Tim,Bobby,Ge)")
+        self.players = playersInput.split(",")
+        self.numPlayers = len(self.players)
+        self.movesThisTurn = 0
+
         self.root = tk.Tk()
-        self.frame = tk.Frame(self.root, width=768, height=576)
-        self.frame.pack()
+        self.root.title("Jiant Genga")
+        self.label = tk.Label(self.root, text="press the green button to start", font=("Helvetica", 32))
+        self.label.place(x=60,y=30)
+        self.label.pack()
 
-        self.takePictures()
+        self.root.mainloop()
 
-    def takePictures(self):
+    def countdown(self):
+        return
 
-        self.camera.start_preview()
-        sleep(10)
-        self.camera.stop_preview()
+    def redButtonCallback(self, channel):
+        return
+
+    def greenButtonCallback(self, channel):
+        return
+
+    def whiteButtonCallback(self, channel):
+        return
 
