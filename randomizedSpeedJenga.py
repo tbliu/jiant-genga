@@ -95,9 +95,6 @@ class RandomizedSpeedJenga(SpeedJenga):
         self.root.destroy()
         os.system("python3 start.py")
 
-    def redButtonCallback(self, channel):
-        return
-
     def greenButtonCallback(self, channel):
         self.root.title("Randomized Jenga")
         self.countdown()

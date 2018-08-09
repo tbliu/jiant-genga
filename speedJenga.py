@@ -26,7 +26,6 @@ class SpeedJenga:
         # Timer setup
         self.root = tk.Tk()
         self.root.title("Jiant Genga")
-        #self.root.attributes("-fullscreen", True)
         self.label = tk.Label(self.root, text="Press the green button to start", font=("Courier", 24))
         self.label.place(x=25,y=25, anchor="center")
         self.label.configure(fg="lime green")
@@ -84,8 +83,6 @@ class SpeedJenga:
     # Red button will be used to end games
     def redButtonCallback(self, channel):
         print("Red button pushed down")
-        #GPIO.cleanup()
-        #sys.exit(0)
 
     # Green button will be used to start games
     def greenButtonCallback(self, channel):
