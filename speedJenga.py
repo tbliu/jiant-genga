@@ -77,7 +77,7 @@ class SpeedJenga:
                 self.label.configure(text = formattedTime)
         
 
-    def whiteButtonCallback(self):
+    def whiteButtonCallback(self, channel):
         self.root.destroy()
         os.system("python3 start.py")
 
