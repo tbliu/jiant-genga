@@ -22,7 +22,6 @@ class SpeedJenga:
 
         # sound player set up
         pygame.init()
-        pygame.mixer.music.load("Jeopardy-theme-song.mp3")
         
         # Timer setup
         self.root = tk.Tk()
@@ -33,12 +32,20 @@ class SpeedJenga:
 
         self.root.mainloop()
 
-    def playSound(self):
+    def playSound(self, song):
+        pygame.mixer.music.load(song)
         print("start playing sound")
         pygame.mixer.music.play(0)
 
+    def pauseSound(self):
+        pygame.mixer.pause()
+        print("paused sound")
+
     def countdown(self):
-        self.playSound()
+        self.label.configure(text = "Ready...")
+        self.playSound("ready.mp3")
+        time.sleep(4)
+        self.playSound("Jeopardy-theme-song.mp3")
         allottedTime = 30.00
         startTime = time.time()
         currTime = time.time()
@@ -49,11 +56,13 @@ class SpeedJenga:
             if GPIO.input(RED_BUTTON):
                 startTime = time.time()
                 currTime = time.time()
-                self.playSound()
+                self.playSound("Jeopardy-theme-song.mp3")
 
             if currTime >= startTime + allottedTime:
                 self.label.configure(font=("Courier", 80))
                 self.label.configure(text = "Time's up")
+                self.pauseSound()
+                self.playSound("buzz.mp3")
                 self.b = tk.Button(self.root, text="OK", command=self.testcallback)
                 self.b.pack()
                 GPIO.cleanup()
