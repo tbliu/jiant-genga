@@ -25,8 +25,8 @@ class RandomizedSpeedJenga(SpeedJenga):
 
         self.camera = PiCamera()
 
-        playersInput = simpledialog.askstring("Players", "Please type the names of all players separated by commas (like Tim,Bobby,Ge)")
-        self.players = playersInput.split(",")
+        self.playersInput = simpledialog.askstring("Players", "Please type the names of all players separated by commas (like Tim,Bobby,Ge)")
+        self.players = self.playersInput.split(",")
         self.numPlayers = len(self.players)
         self.movesThisTurn = 0
 
@@ -46,8 +46,19 @@ class RandomizedSpeedJenga(SpeedJenga):
             currTime = time.time()
 
             # Player made a successful move
-            if GPIO.input(RED_BUTTON):
-                #TODO Get next player
+            if GPIO.input(RED_BUTTON) and self.movesThisTurn < self.numPlayers:
+                nextPlayerIndex = random.randint(0, len(self.players))
+                player = self.players[nextPlayerIndex]
+                del self.players[nextPlayerIndex]
+                self.movesThisTurn += 1
+                startTime = time.time()
+                currTime = time.time()
+            elif GPIO.input(RED_BUTTON) and self.movesThisTurn >= self.numPlayers:
+                self.players = self.playersInput.split(",")
+                nextPlayerIndex = random.randint(0, len(self.players))
+                player = self.players[nextPlayerIndex]
+                del self.players[nextPlayerIndex]
+                self.movesThisTurn = 1
                 startTime = time.time()
                 currTime = time.time()
 
