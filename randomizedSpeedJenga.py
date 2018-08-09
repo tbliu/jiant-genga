@@ -38,14 +38,35 @@ class RandomizedSpeedJenga(SpeedJenga):
 
         self.root.mainloop()
 
-    def countdown(self):
-        return
+    def countdown(self, player):
+        allottedTime = 30.00
+        startTime = time.time()
+        currTime = time.time()
+        while currTime - startTime < allottedTime:
+            currTime = time.time()
+
+            # Player made a successful move
+            if GPIO.input(RED_BUTTON):
+                #TODO Get next player
+                startTime = time.time()
+                currTime = time.time()
+
+            if currTime >= startTime + allottedTime:
+                self.label.configure(font=("Courier", 80))
+                self.label.configure(text = "Time's up")
+                GPIO.cleanup()
+            else:
+                self.label.configure(font=("Courier", 12))
+                timeLeft = round(allottedTime - (currTime - startTime))
+                self.label.configure(text = "Player: " + player + str(timeLeft))
 
     def redButtonCallback(self, channel):
         return
 
     def greenButtonCallback(self, channel):
-        return
+        nextPlayerIndex = random.randint(0, self.numPlayers)
+        nextPlayer = self.players[nextPlayerIndex]
+        self.countdown(nextPlayer)
 
     def whiteButtonCallback(self, channel):
         return
