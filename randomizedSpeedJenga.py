@@ -4,7 +4,7 @@ import sys
 import time
 import random
 from tkinter import simpledialog
-from picamera import PiCamera
+#from picamera import PiCamera
 from time import sleep
 from speedJenga import SpeedJenga
 from consts import *
@@ -23,7 +23,7 @@ class RandomizedSpeedJenga(SpeedJenga):
         GPIO.setup(RED_BUTTON, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
         #GPIO.add_event_detect(RED_BUTTON, GPIO.RISING, callback=self.redButtonCallback, bouncetime=1000)
 
-        self.camera = PiCamera()
+        #self.camera = PiCamera()
 
         playersInput = simpledialog.askstring("Players", "Please type the names of all players separated by commas (like Tim,Bobby,Ge)")
         self.players = playersInput.split(",")
@@ -31,11 +31,16 @@ class RandomizedSpeedJenga(SpeedJenga):
 
         self.root = tk.Tk()
         self.root.title("Jiant Genga")
-        self.label = tk.Label(self.root, text="press the green button to start", font=("Helvetica", 32))
+        self.label = tk.Label(self.root, text="Press the green button to start", font=("Helvetica", 32))
         self.label.place(x=60,y=30)
         self.label.pack()
 
         self.root.mainloop()
+
+    def onClose(self, widget):
+        if (tk.messagebox.askokcancel("Quit", "Do you want to quit?")):
+            widget.grid_remove()
+            GPIO.cleanup()
 
     def countdown(self):
         allottedTime = 30.00
