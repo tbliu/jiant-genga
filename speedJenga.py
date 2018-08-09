@@ -68,7 +68,7 @@ class SpeedJenga:
                 self.label.configure(font=("Courier", 80))
                 self.label.configure(text = "Time's up")
                 self.pauseSound()
-                self.playSound("lose.mp3")
+                self.playSound("buzz.mp3")
                 self.b = tk.Button(self.root, text="OK", command=self.testcallback)
                 self.b.pack()
                 GPIO.cleanup()
