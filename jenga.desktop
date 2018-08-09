@@ -1,0 +1,6 @@
+[Desktop Entry]
+Name=Genga Jenga
+Exec=python3 /home/pi/jiant-genga/start.py
+Terminal=true
+Type=Application
+Icon=/home/pi/Icon.png
