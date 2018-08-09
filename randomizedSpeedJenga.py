@@ -15,20 +15,19 @@ class RandomizedSpeedJenga(SpeedJenga):
         GPIO.setmode(GPIO.BOARD)
 
         GPIO.setup(GREEN_BUTTON, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
-        GPIO.add_event_detect(GREEN_BUTTON, GPIO.RISING, callback=lambda: 3, bouncetime=500)
+        GPIO.add_event_detect(GREEN_BUTTON, GPIO.RISING, callback=self.greenButtonCallback, bouncetime=500)
 
         GPIO.setup(WHITE_BUTTON, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
-        GPIO.add_event_detect(WHITE_BUTTON, GPIO.RISING, callback=lambda: 3, bouncetime=500)
+        GPIO.add_event_detect(WHITE_BUTTON, GPIO.RISING, callback=self.whiteButtonCallback, bouncetime=500)
 
         GPIO.setup(RED_BUTTON, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
-        GPIO.add_event_detect(RED_BUTTON, GPIO.RISING, callback=lambda: 3, bouncetime=500)
+        GPIO.add_event_detect(RED_BUTTON, GPIO.RISING)
 
         self.camera = PiCamera()
 
-        self.playersInput = simpledialog.askstring("Players", "Please type the names of all players separated by commas (like Tim,Bobby,Ge)")
-        self.players = self.playersInput.split(",")
-        self.numPlayers = len(self.players)
-        self.movesThisTurn = 0
+        playersInput = simpledialog.askstring("Players", "Please type the names of all players separated by commas (like Tim,Bobby,Ge)")
+        self.players = playersInput.split(",")
+        self.index = 0
 
         self.root = tk.Tk()
         self.root.title("Jiant Genga")
@@ -46,19 +45,14 @@ class RandomizedSpeedJenga(SpeedJenga):
             currTime = time.time()
 
             # Player made a successful move
-            if GPIO.input(RED_BUTTON) and self.movesThisTurn < self.numPlayers:
-                nextPlayerIndex = random.randint(0, len(self.players))
-                player = self.players[nextPlayerIndex]
-                del self.players[nextPlayerIndex]
-                self.movesThisTurn += 1
+            if GPIO.input(RED_BUTTON) and self.index < len(self.players):
+                player = self.players[self.index]
                 startTime = time.time()
                 currTime = time.time()
-            elif GPIO.input(RED_BUTTON) and self.movesThisTurn >= self.numPlayers:
-                self.players = self.playersInput.split(",")
-                nextPlayerIndex = random.randint(0, len(self.players))
-                player = self.players[nextPlayerIndex]
-                del self.players[nextPlayerIndex]
-                self.movesThisTurn = 1
+            elif GPIO.input(RED_BUTTON) and self.index >= len(self.players):
+                self.index = 0
+                random.shuffle(self.players)
+                player = self.players[self.index]
                 startTime = time.time()
                 currTime = time.time()
 
@@ -67,17 +61,18 @@ class RandomizedSpeedJenga(SpeedJenga):
                 self.label.configure(text = "Time's up")
                 GPIO.cleanup()
             else:
-                self.label.configure(font=("Courier", 12))
+                self.index += 1
+                self.label.configure(font=("Courier", 64))
                 timeLeft = round(allottedTime - (currTime - startTime))
-                self.label.configure(text = "Player: " + player + str(timeLeft))
+                self.label.configure(text = "Player:\n " + player + "\n" + str(timeLeft))
 
     def redButtonCallback(self, channel):
         return
 
     def greenButtonCallback(self, channel):
-        nextPlayerIndex = random.randint(0, self.numPlayers)
-        nextPlayer = self.players[nextPlayerIndex]
-        self.countdown(nextPlayer)
+        player = self.players[self.index]
+        self.index += 1
+        self.countdown(player)
 
     def whiteButtonCallback(self, channel):
         return
