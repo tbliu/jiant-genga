@@ -26,10 +26,6 @@ class SpeedJenga:
 
         GPIO.add_event_detect(RED_BUTTON, GPIO.RISING, callback = self.redButtonCallback)
 
-        # sound player set up
-        mixer.init()
-        mixer.music.load("Jeopardy-theme-song.mp3")
-
         # Timer setup
         self.root = tk.Tk()
         self.root.title("Jiant Genga")
@@ -76,6 +72,8 @@ class SpeedJenga:
 
     # Green button will be used to start games
     def greenButtonCallback(self, channel):
+        mixer.init()
+        mixer.music.load("Jeopardy-theme-song.mp3")
         mixer.music.play()
         self.root.title("Next player, please make a move")
         self.label.config(font=("Courier", 150))
