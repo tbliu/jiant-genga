@@ -18,7 +18,7 @@ class SpeedJenga:
         GPIO.add_event_detect(WHITE_BUTTON, GPIO.RISING)
 
         GPIO.setup(RED_BUTTON, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
-        GPIO.add_event_detect(RED_BUTTON, GPIO.RISING)
+        GPIO.add_event_detect(RED_BUTTON, GPIO.RISING, callback = self.redButtonCallback)
 
         # sound player set up
         pygame.init()
@@ -59,11 +59,12 @@ class SpeedJenga:
         while currTime - startTime < self.allottedTime:
             currTime = time.time()
 
+            """
             if GPIO.input(RED_BUTTON):
                 self.pauseSound()
                 self.playSound("/home/pi/jiant-genga/buzz.mp3")
-                self.destroy()
-                GPIO.cleanup()
+                return self.destroy()
+            """
             # Player successfully made a move so restart the timer for the next player
             if GPIO.input(WHITE_BUTTON):
                 startTime = time.time()
@@ -71,12 +72,12 @@ class SpeedJenga:
                 self.playSound("/home/pi/jiant-genga/Jeopardy-theme-song.mp3")
 
             if currTime >= startTime + self.allottedTime:
-                #self.label.configure(font=("Courier", 60))
-                #self.label.configure(text = "Time's up\nNext player press the green\nbutton to start")
-                self.label.configure(font=("Courier", 80))
-                self.label.configure(text= "Time's up")
+                self.label.configure(font=("Courier", 60))
+                self.label.configure(text = "Time's up\nGreen to restart")
                 self.pauseSound()
                 self.playSound("/home/pi/jiant-genga/buzz.mp3")
+                #while not GPIO.input(GREEN_BUTTON):
+                #    continue
                 time.sleep(2)
                 self.destroy()
                 GPIO.cleanup()
@@ -94,8 +95,9 @@ class SpeedJenga:
 
     # Red button will be used to end games
     def redButtonCallback(self, channel):
-        print("Red button pushed down")
-        self.allottedTime = 0
+        self.pauseSound()
+        self.playSound("/home/pi/jiant-genga/buzz.mp3")
+        self.destroy()
 
     # Green button will be used to start games
     def greenButtonCallback(self, channel):
