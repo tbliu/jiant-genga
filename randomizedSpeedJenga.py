@@ -93,7 +93,7 @@ class RandomizedSpeedJenga(SpeedJenga):
 
     def whiteButtonCallback(self, channel):
         self.root.destroy()
-        os.system("python3 start.py")
+        os.system("python3 /home/pi/jiant-genga/start.py")
 
     def greenButtonCallback(self, channel):
         self.root.title("Randomized Jenga")
