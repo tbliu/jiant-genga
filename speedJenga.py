@@ -71,8 +71,10 @@ class SpeedJenga:
                 self.playSound("/home/pi/jiant-genga/Jeopardy-theme-song.mp3")
 
             if currTime >= startTime + self.allottedTime:
+                #self.label.configure(font=("Courier", 60))
+                #self.label.configure(text = "Time's up\nNext player press the green\nbutton to start")
                 self.label.configure(font=("Courier", 80))
-                self.label.configure(text = "Time's up")
+                self.label.configure(text= "Time's up")
                 self.pauseSound()
                 self.playSound("/home/pi/jiant-genga/buzz.mp3")
                 time.sleep(2)

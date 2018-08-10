@@ -4,6 +4,13 @@ from speedJenga import SpeedJenga
 from randomizedSpeedJenga import RandomizedSpeedJenga
 import RPi.GPIO as GPIO
 from consts import *
+import os
+import signal
+
+def sig_handler(signum, frame):
+    os.system("python3 /home/pi/jiant-genga/start.py")
+
+signal.signal(signal.SIGSEGV, sig_handler)
 
 def speedJengaCallback(channel):
     GPIO.remove_event_detect(RED_BUTTON)
